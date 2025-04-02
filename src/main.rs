@@ -143,7 +143,6 @@ fn test_remove_duplicates() {
 // Return k.
 
 pub fn remove_element(nums: &mut Vec<i32>, val: i32) -> i32 {
-
     nums.retain_mut(|x| *x != val);
 
     nums.len() as i32
@@ -182,3 +181,48 @@ fn test_remove_element() {
     assert_eq!(remove_element(&mut nums6, 5), 0);
     assert_eq!(nums6.len(), 0);
 }
+
+// 28. Find the Index of the First Occurrence in a String
+
+// Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+pub fn str_str(haystack: String, needle: String) -> i32 {
+
+    if needle.is_empty() || !haystack.contains(&needle) { return -1; }
+
+    for (i, c) in haystack.chars().enumerate(){
+        if needle.starts_with(c) && haystack[i..(needle.len() + i)].contains(&needle){
+            return i as i32;
+        }
+    }
+
+    -1
+}
+
+#[test]
+fn test_str_str() {
+    // Basic cases
+    assert_eq!(str_str("hello".to_string(), "ll".to_string()), 2);
+    assert_eq!(str_str("aaaaa".to_string(), "bba".to_string()), -1);
+
+    // Edge cases
+    assert_eq!(str_str("".to_string(), "a".to_string()), -1);
+    assert_eq!(str_str("a".to_string(), "".to_string()), -1);
+    assert_eq!(str_str("".to_string(), "".to_string()), -1);
+
+    // Needle at the beginning
+    assert_eq!(str_str("abc".to_string(), "a".to_string()), 0);
+
+    // Needle at the end
+    assert_eq!(str_str("abc".to_string(), "c".to_string()), 2);
+
+    // Multiple occurrences (should return first)
+    assert_eq!(str_str("mississippi".to_string(), "issi".to_string()), 1);
+
+    // Entire string matches
+    assert_eq!(str_str("abc".to_string(), "abc".to_string()), 0);
+
+    // Overlapping potential matches
+    assert_eq!(str_str("ababc".to_string(), "abc".to_string()), 2);
+}
+
